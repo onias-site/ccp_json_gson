@@ -5,11 +5,11 @@ import java.lang.reflect.Type;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 
-public class ClassExclusionStrategy implements ExclusionStrategy{
+class JsonRepresentationExclusionStrategy implements ExclusionStrategy{
 
-	public final static ClassExclusionStrategy INSTANCE = new ClassExclusionStrategy();
+	public final static JsonRepresentationExclusionStrategy INSTANCE = new JsonRepresentationExclusionStrategy();
 
-	private ClassExclusionStrategy() {}
+	private JsonRepresentationExclusionStrategy() {}
 	
 	
 	public boolean shouldSkipField(FieldAttributes f) {

@@ -14,7 +14,7 @@ class GsonJsonHandler implements CcpJsonHandler {
 	
 	public String toJson(Object md) {
 		String json = GSON_BUILDER
-				.setExclusionStrategies(ClassExclusionStrategy.INSTANCE)
+				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE)
 				.create().toJson(md);
 		Map<String, Object> fromJson = this.fromJson(json);
 		String json2 = GSON.toJson(fromJson);
@@ -24,7 +24,7 @@ class GsonJsonHandler implements CcpJsonHandler {
 	
 	public String asPrettyJson(Object md) {
 		return GSON_BUILDER.setPrettyPrinting()
-				.setExclusionStrategies(ClassExclusionStrategy.INSTANCE)
+				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE)
 				.create().toJson(md);
 	}
 
