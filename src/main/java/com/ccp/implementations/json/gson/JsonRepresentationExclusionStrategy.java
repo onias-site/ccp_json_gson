@@ -15,8 +15,10 @@ class JsonRepresentationExclusionStrategy implements ExclusionStrategy{
 	public boolean shouldSkipField(FieldAttributes f) {
 		Type declaredType = f.getDeclaredType();
 		
-		return declaredType.getTypeName().startsWith(Class.class.getName());
-//		return false;
+		String typeName = declaredType.getTypeName();
+		String name = Class.class.getName();
+		boolean startsWith = typeName.startsWith(name);
+		return startsWith;
 	}
 
 	public boolean shouldSkipClass(Class<?> clazz) {
