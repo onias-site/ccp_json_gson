@@ -6,6 +6,11 @@ import com.ccp.especifications.json.CcpJsonHandler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * Implementação de {@code CcpJsonHandler} usando o Gson 2.7. Aplica
+ * {@code JsonRepresentationExclusionStrategy} para ignorar campos do tipo {@code Class} e
+ * {@code CcpBusiness} na serialização.
+ */
 class GsonJsonHandler implements CcpJsonHandler {
 
 	private static final GsonBuilder GSON_BUILDER = new GsonBuilder();

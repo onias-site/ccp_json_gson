@@ -6,6 +6,10 @@ import com.ccp.business.CcpBusiness;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 
+/**
+ * Estratégia de exclusão do Gson que ignora campos cujo tipo declarado seja {@code Class} ou
+ * {@code CcpBusiness}, evitando serialização recursiva ou de referências funcionais.
+ */
 class JsonRepresentationExclusionStrategy implements ExclusionStrategy{
 
 	public final static JsonRepresentationExclusionStrategy INSTANCE = new JsonRepresentationExclusionStrategy();
