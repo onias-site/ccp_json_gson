@@ -1,5 +1,6 @@
 package com.ccp.implementations.json.gson;
 
+import java.util.List;
 import java.util.Map;
 
 import com.ccp.especifications.json.CcpJsonHandler;
@@ -42,9 +43,20 @@ class GsonJsonHandler implements CcpJsonHandler {
 
 	
 	public boolean isValidJson(String src) {
+		boolean validType = this.isValidType(src, Map.class);
+		return validType;
+	}
+
+	public boolean isValidJsonList(String src) {
+		boolean validType = this.isValidType(src, List.class);
+		return validType;
+	}
+
+
+	protected boolean isValidType(String src, Class<?> classOfT) {
 		try {
-			GSON.fromJson(src, Map.class);
-			return true;
+			var fromJson = GSON.fromJson(src, classOfT);
+			return fromJson != null;
 		} catch (Exception e) {
 			return false;
 		}
