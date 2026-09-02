@@ -9,6 +9,7 @@ import com.ccp.especifications.json.CcpJsonHandler;
 public class CcpGsonJsonHandler implements CcpInstanceProvider<CcpJsonHandler>{
 
 	public CcpJsonHandler getInstance() {
-		return new GsonJsonHandler();
+		GsonJsonHandler gsonJsonHandler = new GsonJsonHandler();
+		return gsonJsonHandler;
 	}
 }

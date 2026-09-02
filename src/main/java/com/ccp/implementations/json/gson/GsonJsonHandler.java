@@ -19,9 +19,11 @@ class GsonJsonHandler implements CcpJsonHandler {
 
 	
 	public String toJson(Object md) {
-		String json = GSON_BUILDER
-				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE)
-				.create().toJson(md);
+		GsonBuilder setExclusionStrategies = GSON_BUILDER
+				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE);
+				Gson create = setExclusionStrategies
+				.create();
+				String json = create.toJson(md);
 		Object fromJson = this.fromJson(json);
 		String json2 = GSON.toJson(fromJson);
 		return json2;
@@ -29,16 +31,21 @@ class GsonJsonHandler implements CcpJsonHandler {
 
 	
 	public String asPrettyJson(Object md) {
-		return GSON_BUILDER.setPrettyPrinting()
-				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE)
-				.create().toJson(md);
+		GsonBuilder setPrettyPrinting = GSON_BUILDER.setPrettyPrinting();
+		GsonBuilder setExclusionStrategies2 = setPrettyPrinting
+				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE);
+				Gson create2 = setExclusionStrategies2
+				.create();
+				String toJson = create2.toJson(md);
+				return toJson;
 	}
 
 	@SuppressWarnings("unchecked")
 	
 	public <T> T  fromJson(String str) {
 		Object fromJson = GSON.fromJson(str, Object.class);
-		return (T)fromJson;
+		T t = (T)fromJson;
+		return t;
 	}
 
 	
@@ -56,7 +63,8 @@ class GsonJsonHandler implements CcpJsonHandler {
 	protected boolean isValidType(String src, Class<?> classOfT) {
 		try {
 			var fromJson = GSON.fromJson(src, classOfT);
-			return fromJson != null;
+			boolean fromJsonDiferente = fromJson != null;
+			return fromJsonDiferente;
 		} catch (Exception e) {
 			return false;
 		}
