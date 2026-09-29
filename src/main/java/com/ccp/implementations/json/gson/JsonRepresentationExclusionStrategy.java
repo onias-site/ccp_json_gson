@@ -6,8 +6,8 @@ import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 
 /**
- * Estratégia de exclusão do Gson que ignora campos cujo tipo declarado seja {@code Class} ou
- * {@code CcpBusiness}, evitando serialização recursiva ou de referências funcionais.
+ * Gson exclusion strategy that skips fields whose declared type is {@code Class} or
+ * {@code CcpBusiness}, avoiding recursive serialization or serialization of functional references.
  */
 class JsonRepresentationExclusionStrategy implements ExclusionStrategy{
 
@@ -17,14 +17,14 @@ class JsonRepresentationExclusionStrategy implements ExclusionStrategy{
 	
 	
 	public boolean shouldSkipField(FieldAttributes f) {
-		boolean startsWith = this.skip(f, Class.class);
-		return startsWith;
+		boolean shouldSkip = this.skip(f, Class.class);
+		return shouldSkip;
 	}
 /*
  * 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private boolean skip(FieldAttributes f, Class... class1) {
-		for (Class class2 : class1) {
+	private boolean skip(FieldAttributes f, Class... skippedType) {
+		for (Class class2 : skippedType) {
 			boolean skip = this.skip(f, class2);
 			if(skip) {
 				return true;
@@ -34,13 +34,13 @@ class JsonRepresentationExclusionStrategy implements ExclusionStrategy{
 	}
  */
 	@SuppressWarnings("rawtypes")
-	private boolean skip(FieldAttributes f, Class<Class> class1) {
+	private boolean skip(FieldAttributes f, Class<Class> skippedType) {
 		Type declaredType = f.getDeclaredType();
 		
 		String typeName = declaredType.getTypeName();
-		String name = class1.getName();
-		boolean startsWith = typeName.startsWith(name);
-		return startsWith;
+		String name = skippedType.getName();
+		boolean shouldSkip = typeName.startsWith(name);
+		return shouldSkip;
 	}
 
 	public boolean shouldSkipClass(Class<?> clazz) {

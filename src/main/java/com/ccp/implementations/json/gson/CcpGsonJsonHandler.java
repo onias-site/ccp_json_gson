@@ -4,7 +4,7 @@ import com.ccp.dependency.injection.CcpInstanceProvider;
 import com.ccp.especifications.json.CcpJsonHandler;
 
 /**
- * Provedor de DI que expõe {@code GsonJsonHandler} como implementação de {@code CcpJsonHandler}.
+ * DI provider that exposes {@code GsonJsonHandler} as the {@code CcpJsonHandler} implementation.
  */
 public class CcpGsonJsonHandler implements CcpInstanceProvider<CcpJsonHandler>{
 

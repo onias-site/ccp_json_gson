@@ -8,9 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- * Implementação de {@code CcpJsonHandler} usando o Gson 2.7. Aplica
- * {@code JsonRepresentationExclusionStrategy} para ignorar campos do tipo {@code Class} e
- * {@code CcpBusiness} na serialização.
+ * {@code CcpJsonHandler} implementation using Gson 2.7. Applies
+ * {@code JsonRepresentationExclusionStrategy} to skip fields of type {@code Class} and
+ * {@code CcpBusiness} during serialization.
  */
 class GsonJsonHandler implements CcpJsonHandler {
 
@@ -18,34 +18,34 @@ class GsonJsonHandler implements CcpJsonHandler {
 	private static final Gson GSON = new Gson();
 
 	
-	public String toJson(Object md) {
-		GsonBuilder setExclusionStrategies = GSON_BUILDER
+	public String toJson(Object object) {
+		GsonBuilder builderWithExclusion = GSON_BUILDER
 				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE);
-				Gson create = setExclusionStrategies
+				Gson gson = builderWithExclusion
 				.create();
-				String json = create.toJson(md);
-		Object fromJson = this.fromJson(json);
-		String json2 = GSON.toJson(fromJson);
-		return json2;
+				String json = gson.toJson(object);
+		Object parsedJson = this.fromJson(json);
+		String normalizedJson = GSON.toJson(parsedJson);
+		return normalizedJson;
 	}
 
 	
-	public String asPrettyJson(Object md) {
-		GsonBuilder setPrettyPrinting = GSON_BUILDER.setPrettyPrinting();
-		GsonBuilder setExclusionStrategies2 = setPrettyPrinting
+	public String asPrettyJson(Object object) {
+		GsonBuilder prettyBuilder = GSON_BUILDER.setPrettyPrinting();
+		GsonBuilder prettyBuilderWithExclusion = prettyBuilder
 				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE);
-				Gson create2 = setExclusionStrategies2
+				Gson prettyGson = prettyBuilderWithExclusion
 				.create();
-				String toJson = create2.toJson(md);
-				return toJson;
+				String prettyJson = prettyGson.toJson(object);
+				return prettyJson;
 	}
 
 	@SuppressWarnings("unchecked")
 	
-	public <T> T  fromJson(String str) {
-		Object fromJson = GSON.fromJson(str, Object.class);
-		T t = (T)fromJson;
-		return t;
+	public <T> T  fromJson(String json) {
+		Object parsedJson = GSON.fromJson(json, Object.class);
+		T result = (T)parsedJson;
+		return result;
 	}
 
 	
@@ -62,9 +62,9 @@ class GsonJsonHandler implements CcpJsonHandler {
 
 	protected boolean isValidType(String src, Class<?> classOfT) {
 		try {
-			var fromJson = GSON.fromJson(src, classOfT);
-			boolean fromJsonDiferente = fromJson != null;
-			return fromJsonDiferente;
+			var parsedJson = GSON.fromJson(src, classOfT);
+			boolean isValid = parsedJson != null;
+			return isValid;
 		} catch (Exception e) {
 			return false;
 		}
