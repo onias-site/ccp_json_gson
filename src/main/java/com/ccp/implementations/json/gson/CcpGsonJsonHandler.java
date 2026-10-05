@@ -8,6 +8,10 @@ import com.ccp.especifications.json.CcpJsonHandler;
  */
 public class CcpGsonJsonHandler implements CcpInstanceProvider<CcpJsonHandler>{
 
+	/**
+	 * Builds the Gson implementation of {@code CcpJsonHandler}.
+	 * @return a new {@code GsonJsonHandler}
+	 */
 	public CcpJsonHandler getInstance() {
 		GsonJsonHandler gsonJsonHandler = new GsonJsonHandler();
 		return gsonJsonHandler;
