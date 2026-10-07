@@ -9,17 +9,28 @@ import com.google.gson.GsonBuilder;
 
 /**
  * {@code CcpJsonHandler} implementation using Gson 2.7. Serialization skips fields whose declared type is {@code Class}
- * (see {@code JsonRepresentationExclusionStrategy}). Note that the shared builder is mutated on every call (the exclusion
- * strategy is added again and, after the first pretty print, pretty printing stays on in the builder).
+ * (see {@code JsonRepresentationExclusionStrategy}).
+ * <p>
+ * The serializers are immutable and built once. Until 2026-10-07 every call mutated a shared static {@code GsonBuilder}:
+ * {@code setExclusionStrategies} appends, so the same strategy was added once more per serialization (an unbounded list
+ * that every field of every later serialization went through), a new {@code Gson} was built per call, pretty printing
+ * stayed on in the builder after the first pretty print, and concurrent requests mutated the same builder.
  */
 class GsonJsonHandler implements CcpJsonHandler {
 
-	/** Builder shared by every serialization. */
-	private static final GsonBuilder GSON_BUILDER = new GsonBuilder();
+	/** Compact serializer with the exclusion strategy. */
+	static final Gson GSON_WITH_EXCLUSION = new GsonBuilder()
+			.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE)
+			.create();
+	/** Indented serializer with the exclusion strategy. */
+	static final Gson PRETTY_GSON_WITH_EXCLUSION = new GsonBuilder()
+			.setPrettyPrinting()
+			.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE)
+			.create();
 	/** Plain Gson used to parse and to normalize. */
 	private static final Gson GSON = new Gson();
 
-	
+
 	/**
 	 * Serializes the object as compact JSON: it is serialized with the exclusion strategy, parsed back into maps and lists
 	 * and serialized again (so numbers become decimals, e.g. {@code 1} becomes {@code 1.0}).
@@ -27,30 +38,21 @@ class GsonJsonHandler implements CcpJsonHandler {
 	 * @return the compact JSON text
 	 */
 	public String toJson(Object object) {
-		GsonBuilder builderWithExclusion = GSON_BUILDER
-				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE);
-				Gson gson = builderWithExclusion
-				.create();
-				String json = gson.toJson(object);
+		String json = GSON_WITH_EXCLUSION.toJson(object);
 		Object parsedJson = this.fromJson(json);
 		String normalizedJson = GSON.toJson(parsedJson);
 		return normalizedJson;
 	}
 
-	
+
 	/**
 	 * Serializes the object as indented JSON, with the exclusion strategy.
 	 * @param object the object to serialize
 	 * @return the indented JSON text
 	 */
 	public String asPrettyJson(Object object) {
-		GsonBuilder prettyBuilder = GSON_BUILDER.setPrettyPrinting();
-		GsonBuilder prettyBuilderWithExclusion = prettyBuilder
-				.setExclusionStrategies(JsonRepresentationExclusionStrategy.INSTANCE);
-				Gson prettyGson = prettyBuilderWithExclusion
-				.create();
-				String prettyJson = prettyGson.toJson(object);
-				return prettyJson;
+		String prettyJson = PRETTY_GSON_WITH_EXCLUSION.toJson(object);
+		return prettyJson;
 	}
 
 	/**
